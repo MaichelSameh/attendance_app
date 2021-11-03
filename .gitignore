@@ -34,8 +34,6 @@
 # app sensetive data
 lib/const/links.dart
 
-assets/
-
 # Web related
 lib/generated_plugin_registrant.dart
 
