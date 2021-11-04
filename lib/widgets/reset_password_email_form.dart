@@ -32,15 +32,17 @@ class _ResetPasswordEmailFormState extends State<ResetPasswordEmailForm> {
   Future<void> _sentCode() async {
     if (_emailController.text.isNotEmpty) {
       bool valid = await Get.find<LoginController>()
-          .sendCodeEmail(_emailController.text);
+          .sendCodeEmail(_emailController.text)
+          .catchError((error) {
+        _showErrorMessage = true;
+        _errorMessageKey = "$error";
+        return false;
+      });
       if (valid) {
         FocusScope.of(context).unfocus();
         widget._nextScreen();
       } else {
-        setState(() {
-          _showErrorMessage = true;
-          _errorMessageKey = "email_not_found";
-        });
+        setState(() {});
       }
     } else {
       setState(() {

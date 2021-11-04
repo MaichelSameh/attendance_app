@@ -201,7 +201,13 @@ class _ResetPasswordNewPasswordFormState
               .resetPassword(_passwordController.text);
           if (valid) {
             FocusScope.of(context).unfocus();
-            Navigator.of(context).pushReplacementNamed(HomeScreen.route_name);
+            Navigator.of(context)
+                .pushReplacementNamed(HomeScreen.route_name)
+                .catchError((error) {
+              _showErrorMessage = true;
+              _errorMessageKey = "$error";
+              return false;
+            });
           }
         } else {
           setState(() {

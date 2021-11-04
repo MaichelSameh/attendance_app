@@ -46,7 +46,9 @@ class _SplashScreenState extends State<SplashScreen> {
         } else {
           Navigator.of(context).pushReplacementNamed(
               //trying to auto login the current user without any extra data
-              await Get.find<LoginController>().tryAutoLogin()
+              await Get.find<LoginController>().tryAutoLogin().catchError((_) {
+            return false;
+          })
                   ? HomeScreen.route_name
                   : LoginScreen.route_name);
         }

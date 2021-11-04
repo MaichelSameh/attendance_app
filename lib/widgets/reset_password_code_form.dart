@@ -107,7 +107,12 @@ class _ResetPasswordCodeFormState extends State<ResetPasswordCodeForm> {
   Future<void> _getCode() async {
     if (_codeController.text.length == 6) {
       bool valid = await Get.find<LoginController>()
-          .validateCode(_codeController.text.trim());
+          .validateCode(_codeController.text.trim())
+          .catchError((error) {
+        _showErrorMessage = true;
+        _errorMessageKey = "$error";
+        return false;
+      });
       if (valid) {
         FocusScope.of(context).unfocus();
         widget._nextScreen();

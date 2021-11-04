@@ -47,6 +47,7 @@ class _SettingScreenState extends State<SettingScreen> {
           _refreshController.refreshCompleted();
         },
         child: ListView(
+          padding: EdgeInsets.zero,
           children: [
             CustomScreenHeader("settings"),
             _buildCustomCard(

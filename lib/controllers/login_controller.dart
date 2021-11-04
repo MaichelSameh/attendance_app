@@ -191,7 +191,7 @@ class LoginController extends GetxController {
         //extracting the server response
         var resData = json.decode(res.body);
         //throwing the error
-        throw resData["message"];
+        throw resData["message"] ?? resData["email"][0];
       }
     } catch (error) {
       echo(
