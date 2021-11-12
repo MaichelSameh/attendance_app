@@ -26,7 +26,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool _hideOldPassword = true;
   bool _hideNewPassword = true;
   bool _hideConfirmNewPassword = true;
-  // ignore: unused_field
   bool _showMessage = false;
   bool _messageError = false;
 
@@ -87,19 +86,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   Widget _buildMessage(Size _size) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: _size.height(20)),
-        child: Text(
-          Get.find<AppLocalizationController>().getTranslatedValue(_message),
-          style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                color: _messageError ? Colors.red : ConstData.green_color,
-                fontSize: 16,
+    return _showMessage
+        ? Align(
+            alignment: Get.find<AppLocalizationController>().isRTLanguage
+                ? Alignment.centerRight
+                : Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: _size.height(20)),
+              child: Text(
+                Get.find<AppLocalizationController>()
+                    .getTranslatedValue(_message),
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: _messageError ? Colors.red : ConstData.green_color,
+                      fontSize: 16,
+                    ),
               ),
-        ),
-      ),
-    );
+            ),
+          )
+        : const SizedBox();
   }
 
   Widget _buildChangePasswordButton(Size _size, BuildContext context) {
@@ -119,19 +123,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
         ),
         onTap: () async {
+          FocusScope.of(context).unfocus();
+          setState(() {
+            _showMessage = false;
+          });
           if (validate()) {
             bool changed = await Get.find<LoginController>()
                 .changePassword(
                     _oldPasswordController.text, _newPasswordController.text)
                 .catchError((error) {
-              FocusScope.of(context).unfocus();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    error.toString(),
-                  ),
-                ),
-              );
+              setState(() {
+                _showMessage = true;
+                _messageError = true;
+                _message = "$error";
+              });
             });
             if (changed) {
               setState(() {
@@ -174,11 +179,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         suffixIcon: GestureDetector(
           onTap: () {
             setState(() {
-              obscureText = !obscureText;
+              switch (hintKey) {
+                case "enter_old_password":
+                  _hideOldPassword = !_hideOldPassword;
+                  break;
+                case "enter_new_password":
+                  _hideNewPassword = !_hideNewPassword;
+
+                  break;
+                default:
+                  _hideConfirmNewPassword = !_hideConfirmNewPassword;
+              }
             });
           },
           child: Container(
             padding: EdgeInsets.all(_size.width(10)),
+            color: Colors.transparent,
             child: SvgPicture.asset(
               obscureText ? "assets/icons/hide.svg" : "assets/icons/show.svg",
               color: Color.fromRGBO(196, 198, 204, 1),

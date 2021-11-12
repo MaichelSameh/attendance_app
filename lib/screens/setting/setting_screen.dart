@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../api/employee_data_uploader_api.dart';
 import '../../const/const_data.dart';
 import '../../controllers/localization_controller.dart';
 import '../../models/size.dart';
@@ -26,70 +25,68 @@ class _SettingScreenState extends State<SettingScreen> {
 
   bool _canAddLocation = false;
 
-  EmployeeDataUploaderAPI _employeeDataUploaderAPI = EmployeeDataUploaderAPI();
-
   @override
   Widget build(BuildContext context) {
     Size _size = Size(context);
     return Scaffold(
-      body: SmartRefresher(
-        enablePullDown: true,
-        controller: _refreshController,
-        onRefresh: () async {
-          _canAddLocation =
-              await _employeeDataUploaderAPI.canAddBranch().catchError(
-            (error) {
-              print("SETTING_SCREEN build error: $error");
-              _refreshController.refreshCompleted();
-            },
-          );
-          setState(() {});
-          _refreshController.refreshCompleted();
-        },
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            CustomScreenHeader("settings"),
-            _buildCustomCard(
-              size: _size,
-              title: "language",
-              trailing: Row(
-                children: [
-                  Text(
-                    ConstData.supportedLanguages
-                        .firstWhere((element) =>
-                            element.languageCode ==
-                            Get.find<AppLocalizationController>()
-                                .currentLocale
-                                .languageCode)
-                        .languageCode
-                        .toUpperCase(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  SizedBox(width: _size.width(10)),
-                  Text(
-                    ConstData.supportedLanguages
-                        .firstWhere((element) =>
-                            element.languageCode ==
-                            Get.find<AppLocalizationController>()
-                                .currentLocale
-                                .languageCode)
-                        .flag,
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.of(context)
-                    .pushNamed(ChangeLanguageScreen.route_name);
-              },
+      body: Column(
+        children: [
+          CustomScreenHeader("settings"),
+          _buildCustomCard(
+            size: _size,
+            title: "language",
+            trailing: Row(
+              children: [
+                Text(
+                  ConstData.supportedLanguages
+                      .firstWhere((element) =>
+                          element.languageCode ==
+                          Get.find<AppLocalizationController>()
+                              .currentLocale
+                              .languageCode)
+                      .languageCode
+                      .toUpperCase(),
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(width: _size.width(10)),
+                Text(
+                  ConstData.supportedLanguages
+                      .firstWhere((element) =>
+                          element.languageCode ==
+                          Get.find<AppLocalizationController>()
+                              .currentLocale
+                              .languageCode)
+                      .flag,
+                ),
+              ],
             ),
-            SizedBox(height: _size.height(20)),
+            onTap: () {
+              Navigator.of(context).pushNamed(ChangeLanguageScreen.route_name);
+            },
+          ),
+          SizedBox(height: _size.height(20)),
+          _buildCustomCard(
+            size: _size,
+            title: "change_password",
+            trailing: SvgPicture.asset(
+              "assets/icons/to_icon.svg",
+              color: Color.fromRGBO(141, 141, 141, 1),
+              width: _size.width(16),
+              height: _size.height(12),
+              matchTextDirection: true,
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamed(ChangePasswordScreen.route_name);
+            },
+          ),
+          SizedBox(height: _size.height(20)),
+          if (_canAddLocation)
             _buildCustomCard(
               size: _size,
-              title: "change_password",
+              title: "add_branch",
               trailing: SvgPicture.asset(
                 "assets/icons/to_icon.svg",
                 color: Color.fromRGBO(141, 141, 141, 1),
@@ -97,31 +94,13 @@ class _SettingScreenState extends State<SettingScreen> {
                 height: _size.height(12),
                 matchTextDirection: true,
               ),
-              onTap: () {
-                Navigator.of(context)
-                    .pushNamed(ChangePasswordScreen.route_name);
+              onTap: () async {
+                await Navigator.pushNamed(
+                    context, AddNewBranchScreen.route_name);
+                _refreshController.requestRefresh();
               },
             ),
-            SizedBox(height: _size.height(20)),
-            if (_canAddLocation)
-              _buildCustomCard(
-                size: _size,
-                title: "add_branch",
-                trailing: SvgPicture.asset(
-                  "assets/icons/to_icon.svg",
-                  color: Color.fromRGBO(141, 141, 141, 1),
-                  width: _size.width(16),
-                  height: _size.height(12),
-                  matchTextDirection: true,
-                ),
-                onTap: () async {
-                  await Navigator.pushNamed(
-                      context, AddNewBranchScreen.route_name);
-                  _refreshController.requestRefresh();
-                },
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

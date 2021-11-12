@@ -8,7 +8,6 @@ class PermissionInfo {
   late final String _permissionTypeid;
   late String _description;
   late DateTime _dateTime;
-  late DateTime _time;
   late PermissionState _state;
   late bool _canEdit;
 
@@ -19,7 +18,6 @@ class PermissionInfo {
   String get permissionTypeid => this._permissionTypeid;
   String get description => this._description;
   DateTime get dateTime => this._dateTime;
-  DateTime get time => this._time;
   PermissionState get state => this._state;
 
   PermissionInfo({
@@ -30,7 +28,6 @@ class PermissionInfo {
     required DateTime date,
     required bool canEdit,
     required PermissionState state,
-    required DateTime time,
   }) {
     this._id = id;
     this._canEdit = canEdit;
@@ -39,14 +36,12 @@ class PermissionInfo {
     this._permissionType = permissionType;
     this._permissionTypeid = permissionTypeID;
     this._state = state;
-    this._time = time;
   }
 
   PermissionInfo.empty() {
     this._id = 0;
     this._canEdit = false;
     this._dateTime = DateTime.now();
-    this._time = DateTime.now();
     this._description = "";
     this._permissionType = "";
     this._permissionTypeid = "";
@@ -71,13 +66,12 @@ class PermissionInfo {
         this._state = PermissionState.Pending;
     }
     this._id = jsonData["id"];
-    this._dateTime = DateTime.parse(jsonData["from"] ?? "");
 
     jsonData["time"] != null
-        ? this._time = DateTime.tryParse(jsonData["time"].toString()) ??
+        ? this._dateTime = DateTime.tryParse(jsonData["time"].toString()) ??
             DateTime.parse(
                 (jsonData["from"] ?? "") + " " + (jsonData["time"] ?? ""))
-        : _time = DateTime.now();
+        : _dateTime = DateTime.now();
     this._description = jsonData["description"] ?? "";
     this._permissionType = jsonData["permission_type"]["name"] ?? "";
     this._canEdit = jsonData["can_edit_or_delete"] ?? false;
@@ -105,7 +99,6 @@ class PermissionInfo {
       "permission_type": {"name": permissionType, "id": permissionTypeid},
       "from": DateFormat("yyyy-MM-dd", "en").format(dateTime),
       "can_edit_or_delete": this.canEdit,
-      "time": this._time,
     };
   }
 

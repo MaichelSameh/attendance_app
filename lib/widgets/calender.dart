@@ -208,7 +208,9 @@ class _CalenderState extends State<Calender> {
           backgroundColor: widget._color(date),
           radius: _size.width(15),
           child: Text(
-            date.day.toString(),
+            date.day > 9
+                ? DateFormat('dd').format(date)
+                : DateFormat("d").format(date),
             style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   color: date.month != _currentTime.month
                       ? Colors.grey[350]

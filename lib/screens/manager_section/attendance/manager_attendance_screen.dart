@@ -135,10 +135,9 @@ class _ManagerAttendanceScreenState extends State<ManagerAttendanceScreen> {
         case AttendanceState.Absent:
           return GestureDetector(
             onTap: () async {
-              attendance = await Navigator.of(context).pushNamed(
+              await Navigator.of(context).pushNamed(
                   ManagerAttendanceDetailsScreen.route_name,
-                  arguments: element) as AttendanceInfo;
-              setState(() {});
+                  arguments: element);
             },
             child: ManagerAttendanceCard.absent(
               startDate: attendance.startDate,
@@ -148,10 +147,9 @@ class _ManagerAttendanceScreenState extends State<ManagerAttendanceScreen> {
         case AttendanceState.Delay:
           return GestureDetector(
             onTap: () async {
-              attendance = await Navigator.of(context).pushNamed(
+              await Navigator.of(context).pushNamed(
                   ManagerAttendanceDetailsScreen.route_name,
-                  arguments: element) as AttendanceInfo;
-              setState(() {});
+                  arguments: element);
             },
             child: ManagerAttendanceCard.delay(
               startDate: attendance.startDate,
@@ -162,10 +160,9 @@ class _ManagerAttendanceScreenState extends State<ManagerAttendanceScreen> {
         case AttendanceState.Present:
           return GestureDetector(
             onTap: () async {
-              attendance = await Navigator.of(context).pushNamed(
+              await Navigator.of(context).pushNamed(
                   ManagerAttendanceDetailsScreen.route_name,
-                  arguments: element) as AttendanceInfo;
-              setState(() {});
+                  arguments: element);
             },
             child: ManagerAttendanceCard.present(
               startDate: attendance.startDate,
@@ -176,10 +173,9 @@ class _ManagerAttendanceScreenState extends State<ManagerAttendanceScreen> {
         case AttendanceState.Vacation:
           return GestureDetector(
             onTap: () async {
-              attendance = await Navigator.of(context).pushNamed(
+              await Navigator.of(context).pushNamed(
                   ManagerAttendanceDetailsScreen.route_name,
-                  arguments: element) as AttendanceInfo;
-              setState(() {});
+                  arguments: element);
             },
             child: ManagerAttendanceCard.vacation(
               startDate: attendance.startDate,

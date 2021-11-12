@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../../const/links.dart';
 import '../../../const/const_data.dart';
 import '../../../controllers/localization_controller.dart';
 import '../../../models/report_info.dart';
@@ -33,8 +34,10 @@ class _ManagerReportDetailsScreenState
       builder: (_) => PreLoader(),
       barrierDismissible: false,
     );
+
     //fetching the image from the internet
-    http.Response res = await http.get(Uri.parse(fileLink));
+    http.Response res =
+        await http.get(Uri.https(ServerConstants.server_base_link, fileLink));
     //getting the app directory to store the image in
     Directory documentDirectory = await getTemporaryDirectory();
     //getting the images directory

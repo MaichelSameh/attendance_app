@@ -84,6 +84,7 @@ class HandleNotification {
           notification.body!.isCaseInsensitiveContains("added")) {
         Get.find<UserController>().reverseManagerMode();
       }
+      navigator!.pushReplacementNamed(ManagerHomeScreen.route_name);
       Get.toNamed(NotificationScreen.route_name);
     });
   }

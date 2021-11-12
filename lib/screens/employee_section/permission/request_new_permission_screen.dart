@@ -69,8 +69,12 @@ class _RequestNewPermissionScreenState
     List<Map<String, Object>> list = [];
     for (int i = 0; i < range; i++) {
       list.add({
-        "id": int.parse(DateFormat("yy").format(DateTime(i))),
-        "name": DateFormat("yy").format(DateTime(i)),
+        "id": int.parse(DateFormat("yy", "en").format(DateTime(
+          i,
+        ))),
+        "name": DateFormat("yy").format(DateTime(
+          i,
+        )),
       });
     }
     return list;
@@ -237,8 +241,7 @@ class _RequestNewPermissionScreenState
                 description: _description.text,
                 permissionType: _selectedReason!["name"] as String,
                 permissionTypeID: _selectedReason!["id"].toString(),
-                time: permission.time,
-                date: permission.dateTime,
+                date: _selectedDate,
                 canEdit: permission.canEdit,
                 state: permission.state,
               ),

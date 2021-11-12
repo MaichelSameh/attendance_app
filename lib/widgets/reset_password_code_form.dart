@@ -94,7 +94,6 @@ class _ResetPasswordCodeFormState extends State<ResetPasswordCodeForm> {
                       _getCode();
                     }
                   }),
-                  keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
             ),

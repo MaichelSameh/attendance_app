@@ -151,7 +151,7 @@ class _ManagerHomeScreenState extends State<ManagerHomeScreen> {
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushNamed(
-                    ManagerPermissionDetailsScreen.route_name,
+                    ManagerReportDetailsScreen.route_name,
                     arguments: element,
                   );
                 },
@@ -225,11 +225,12 @@ class _ManagerHomeScreenState extends State<ManagerHomeScreen> {
               return element.containsKey("permission")
                   ? permission.id != PermissionInfo.empty().id
                       ? GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pushNamed(
+                          onTap: () async {
+                            await Navigator.of(context).pushNamed(
                               ManagerPermissionDetailsScreen.route_name,
                               arguments: element,
                             );
+                            _refreshController.requestRefresh();
                           },
                           child: ManagerPermissionCard(
                             date: permission.dateTime,
@@ -244,11 +245,12 @@ class _ManagerHomeScreenState extends State<ManagerHomeScreen> {
                   : element.containsKey("vacation")
                       ? vacation.id != VacationInfo.empty().id
                           ? GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
+                              onTap: () async {
+                                await Navigator.of(context).pushNamed(
                                   ManagerVacationDetailsScreen.route_name,
                                   arguments: element,
                                 );
+                                _refreshController.requestRefresh();
                               },
                               child: ManagerVacationCard(
                                 date: vacation.startDate,

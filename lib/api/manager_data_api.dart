@@ -656,11 +656,6 @@ class ManagerDataAPI {
         //converting the response body
         Map<String, dynamic> resData =
             json.decode(res.body) as Map<String, dynamic>;
-        echo(
-          variableName: "resData",
-          functionName: "fetchEmployeeProfileData",
-          data: resData.toString(),
-        );
         //returning the data as it used in the app
         return [
           {"work": resData["work_days_count"].toString() + " days"},

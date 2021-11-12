@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import '../const/const_data.dart';
 import '../controllers/controllers.dart';
 import '../models/size.dart';
-import '../screens/home_screen.dart';
 import 'widgets.dart';
 
 class ResetPasswordNewPasswordForm extends StatefulWidget {
@@ -23,6 +22,7 @@ class _ResetPasswordNewPasswordFormState
 
   TextEditingController _confirmPasswordController = TextEditingController();
 
+  bool loading = false;
   bool _hidePassword = true;
   bool _hideConfirmPassword = true;
 
@@ -132,7 +132,9 @@ class _ResetPasswordNewPasswordFormState
         child: Container(
           padding: EdgeInsets.all(_size.width(10)),
           child: SvgPicture.asset(
-            _hidePassword ? "assets/icons/hide.svg" : "assets/icons/show.svg",
+            _hideConfirmPassword
+                ? "assets/icons/hide.svg"
+                : "assets/icons/show.svg",
             color: Color.fromRGBO(196, 198, 204, 1),
             width: _size.width(30),
             height: _size.height(25),
@@ -175,52 +177,60 @@ class _ResetPasswordNewPasswordFormState
   }
 
   Widget _buildSetPasswordButton(Size _size, BuildContext ctx) {
-    return CustomElevatedButton(
-      width: 343,
-      height: 72,
-      child: Text(
-        Get.find<AppLocalizationController>()
-            .getTranslatedValue("set_password")
-            .toUpperCase(),
-        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+    return loading
+        ? PreLoader()
+        : CustomElevatedButton(
+            width: 343,
+            height: 72,
+            child: Text(
+              Get.find<AppLocalizationController>()
+                  .getTranslatedValue("set_password")
+                  .toUpperCase(),
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
             ),
-      ),
-      onTap: () async {
-        setState(() {
-          _showErrorMessage = false;
-        });
-        if (_passwordController.text == _confirmPasswordController.text &&
-            (_passwordController.text.contains(RegExp("[a-z]")) &&
-                _passwordController.text.contains(RegExp("[A-Z]")) &&
-                _passwordController.text.contains(RegExp("[0-9]"))) &&
-            _passwordController.text.isNotEmpty) {
-          bool valid = await Get.find<LoginController>()
-              .resetPassword(_passwordController.text);
-          if (valid) {
-            FocusScope.of(context).unfocus();
-            Navigator.of(context)
-                .pushReplacementNamed(HomeScreen.route_name)
-                .catchError((error) {
-              _showErrorMessage = true;
-              _errorMessageKey = "$error";
-              return false;
-            });
-          }
-        } else {
-          setState(() {
-            _showErrorMessage = true;
-            _errorMessageKey = _passwordController.text.isEmpty
-                ? "new_password_not_found"
-                : _passwordController.text != _confirmPasswordController.text
-                    ? "passwords_not_matching"
-                    : "weak_password";
-          });
-        }
-      },
-    );
+            onTap: () async {
+              setState(() {
+                loading = true;
+                _showErrorMessage = false;
+              });
+              if (_passwordController.text == _confirmPasswordController.text &&
+                  (_passwordController.text.contains(RegExp("[a-z]")) &&
+                      _passwordController.text.contains(RegExp("[A-Z]")) &&
+                      _passwordController.text.contains(RegExp("[0-9]"))) &&
+                  _passwordController.text.isNotEmpty) {
+                bool valid = await Get.find<LoginController>()
+                    .resetPassword(_passwordController.text)
+                    .catchError((error) {
+                  _showErrorMessage = true;
+                  _errorMessageKey = "$error";
+                  return false;
+                });
+
+                if (valid) {
+                  setState(() {
+                    loading = false;
+                  });
+                  FocusScope.of(context).unfocus();
+                  widget._loginScreen();
+                }
+              } else {
+                setState(() {
+                  loading = false;
+                  _showErrorMessage = true;
+                  _errorMessageKey = _passwordController.text.isEmpty
+                      ? "new_password_not_found"
+                      : _passwordController.text !=
+                              _confirmPasswordController.text
+                          ? "passwords_not_matching"
+                          : "weak_password";
+                });
+              }
+            },
+          );
   }
 
   Widget _buildTextField({

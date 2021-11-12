@@ -20,6 +20,8 @@ class LoginController extends GetxController {
 
   String _tokenid = "";
 
+  String _code = "";
+
   String get email => this._email;
 
   String get tokenid => this._tokenid;
@@ -46,7 +48,6 @@ class LoginController extends GetxController {
   // getting the notification tokenID from the firebase
   Future<String> get _getNotificationTokenid async {
     String token = await FirebaseMessaging.instance.getToken() ?? "no token";
-    print(token);
     return token;
   }
 
@@ -128,8 +129,8 @@ class LoginController extends GetxController {
         return "123458";
       case "ID123457_C1": //salesman account
         return "c211d86bd9d488eb";
-      case "ID123458_C1": //manager
-        return "a8b49a8adad0d346";
+      case "AAA": //manager
+        return "1234";
       default:
         return id ?? "";
     }
@@ -155,12 +156,11 @@ class LoginController extends GetxController {
     update();
     try {
       //creating the request link
-      final Uri permissionTypesLink = Uri.https(
-          ServerConstants.server_base_link,
+      final Uri link = Uri.https(ServerConstants.server_base_link,
           ServerConstants.employee_send_email_request);
       //sending a get request to get back data from the server without changing any thing
       final http.Response res = await http.post(
-        permissionTypesLink,
+        link,
         headers: {
           //the response data format
           "Accept": ServerConstants.response_format,
@@ -205,6 +205,8 @@ class LoginController extends GetxController {
 
   //validating if the getting code is valid or not
   Future<bool> validateCode(String code) async {
+    _code = code;
+    update();
     try {
       //creating the request link
       final Uri permissionTypesLink = Uri.https(
@@ -277,6 +279,7 @@ class LoginController extends GetxController {
           "email": email,
           'password': password,
           "password_confirmation": password,
+          "verfication_code": _code,
         },
       );
       //in this case the request had been completed successfully
@@ -297,8 +300,10 @@ class LoginController extends GetxController {
       else {
         //extracting the server response
         var resData = json.decode(res.body);
+
+        print(resData);
         //throwing the error
-        throw resData["message"];
+        throw resData["message"] ?? resData["verfication_code"][0];
       }
     } catch (error) {
       echo(

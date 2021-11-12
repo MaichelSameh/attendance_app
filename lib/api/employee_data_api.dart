@@ -928,33 +928,35 @@ class EmployeeDataAPI {
             "Bearer ${Get.find<LoginController>().tokenid}";
       //sending the report file if exist
       if (image != null) {
-        //sending the request
-        final http.StreamedResponse res = await request.send();
-        //in this case the request had completed successfully
-        if (res.statusCode == 200) {
-          await Get.find<LoginController>().flushUserData();
-          //parsing the response to a understandable one so we can extract the server error message
-          final http.Response resData = await http.Response.fromStream(res);
-          //extracting and throwing back the error message
-          throw json.decode(resData.body)["message"];
-        }
-        //in this case case our token session is expired so we will just flush it
-        //and throw back an error message to inform the user that he need to try again
-        else if (res.statusCode == 401) {
-          //flushing the token to start a new session
-          Get.find<LoginController>().flushTokenid();
-          //throwing back the error message
-          throw Get.find<AppLocalizationController>()
-              .getTranslatedValue("try_again");
-        }
-        //in this case something went wrong in the server
-        //so we will just throw back the server error
-        else {
-          //parsing the response to a understandable one so we can extract the server error message
-          final http.Response resData = await http.Response.fromStream(res);
-          //extracting and throwing back the error message
-          throw json.decode(resData.body)["message"];
-        }
+        request.files
+            .add(await http.MultipartFile.fromPath("profile", image.path));
+      }
+      //sending the request
+      final http.StreamedResponse res = await request.send();
+      //in this case the request had completed successfully
+      if (res.statusCode == 200) {
+        await Get.find<LoginController>().flushUserData();
+        //parsing the response to a understandable one so we can extract the server error message
+        final http.Response resData = await http.Response.fromStream(res);
+        //extracting and throwing back the error message
+        throw json.decode(resData.body)["message"];
+      }
+      //in this case case our token session is expired so we will just flush it
+      //and throw back an error message to inform the user that he need to try again
+      else if (res.statusCode == 401) {
+        //flushing the token to start a new session
+        Get.find<LoginController>().flushTokenid();
+        //throwing back the error message
+        throw Get.find<AppLocalizationController>()
+            .getTranslatedValue("try_again");
+      }
+      //in this case something went wrong in the server
+      //so we will just throw back the server error
+      else {
+        //parsing the response to a understandable one so we can extract the server error message
+        final http.Response resData = await http.Response.fromStream(res);
+        //extracting and throwing back the error message
+        throw json.decode(resData.body)["message"];
       }
     } catch (error) {
       echo(

@@ -85,7 +85,7 @@ class _PermissionDetailsScreenState extends State<PermissionDetailsScreen> {
                                       .isRTLanguage
                                   ? "mm : hh"
                                   : "hh : mm")
-                              .format(permission.time) +
+                              .format(permission.dateTime) +
                           " " +
                           (Get.find<AppLocalizationController>()
                               .getTranslatedValue(
@@ -247,11 +247,13 @@ class _PermissionDetailsScreenState extends State<PermissionDetailsScreen> {
                 ),
                 CustomElevatedButton(
                   onTap: () async {
-                    permission = await Navigator.pushNamed(
+                    PermissionInfo temp = await Navigator.pushNamed(
                       context,
                       RequestNewPermissionScreen.route_name,
                       arguments: permission,
                     ) as PermissionInfo;
+                    print(temp);
+                    permission = temp;
                     setState(() {});
                   },
                   width: 130,
