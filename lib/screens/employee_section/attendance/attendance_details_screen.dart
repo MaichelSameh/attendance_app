@@ -39,10 +39,21 @@ class AttendanceDetailsScreen extends StatelessWidget {
                       CustomTitleHeader(
                         width: 368,
                         // height: 91,
-                        title: DateFormat("dd ").format(attendance.startDate) +
-                            ConstData
-                                .listOfMonths[attendance.startDate.month]! +
-                            DateFormat(",yyy").format(attendance.startDate),
+                        title: DateFormat("dd ").format(attendance.state ==
+                                        AttendanceState.Absent ||
+                                    attendance.state == AttendanceState.Vacation
+                                ? attendance.date
+                                : attendance.startDate) +
+                            ConstData.listOfMonths[attendance.state ==
+                                        AttendanceState.Absent ||
+                                    attendance.state == AttendanceState.Absent
+                                ? attendance.date.month
+                                : attendance.startDate.month]! +
+                            DateFormat(",yyy").format(attendance.state ==
+                                        AttendanceState.Absent ||
+                                    attendance.state == AttendanceState.Absent
+                                ? attendance.date
+                                : attendance.startDate),
                         leading: SvgPicture.asset(
                           "assets/icons/attendance_icon.svg",
                           width: _size.width(33),

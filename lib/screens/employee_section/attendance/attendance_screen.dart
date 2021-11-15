@@ -100,7 +100,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     setState(() {});
                   },
                   child: AttendanceCard.absent(
-                    startDate: _attendances[index].startDate,
+                    startDate: _attendances[index].date,
                   ),
                 );
               case AttendanceState.Delay:
@@ -138,7 +138,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     setState(() {});
                   },
                   child: AttendanceCard.vacation(
-                    startDate: _attendances[index].startDate,
+                    startDate: _attendances[index].date,
                   ),
                 );
             }

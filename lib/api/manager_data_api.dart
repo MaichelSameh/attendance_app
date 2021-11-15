@@ -1058,7 +1058,6 @@ class ManagerDataAPI {
       if (res.statusCode == 200) {
         //extracting the response body
         dynamic resData = json.decode(res.body);
-        print(resData);
         //extracting the required data
         List<dynamic> data = resData["data"];
         //creating a variable to hold all the data until return it

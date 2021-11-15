@@ -48,7 +48,7 @@ class AllEventsColumn extends StatelessWidget {
                   _refresher.requestRefresh();
                 },
                 child: AttendanceCard.absent(
-                  startDate: attendance.startDate,
+                  startDate: attendance.date,
                 ),
               );
             case AttendanceState.Delay:
@@ -72,7 +72,7 @@ class AllEventsColumn extends StatelessWidget {
                       arguments: attendance);
                   _refresher.requestRefresh();
                 },
-                child: AttendanceCard.vacation(startDate: attendance.startDate),
+                child: AttendanceCard.vacation(startDate: attendance.date),
               );
           }
         }

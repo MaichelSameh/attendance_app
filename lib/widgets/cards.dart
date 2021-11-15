@@ -263,6 +263,7 @@ class AttendanceCard extends StatelessWidget {
     this._isAbsent = true;
     this._color = Color.fromRGBO(4, 162, 174, 1);
     this._isDelay = false;
+    this._isVacation = true;
   }
 
   @override

@@ -140,7 +140,7 @@ class _ManagerAttendanceScreenState extends State<ManagerAttendanceScreen> {
                   arguments: element);
             },
             child: ManagerAttendanceCard.absent(
-              startDate: attendance.startDate,
+              startDate: attendance.date,
               employee: employee,
             ),
           );
@@ -178,7 +178,7 @@ class _ManagerAttendanceScreenState extends State<ManagerAttendanceScreen> {
                   arguments: element);
             },
             child: ManagerAttendanceCard.vacation(
-              startDate: attendance.startDate,
+              startDate: attendance.date,
               employee: employee,
             ),
           );

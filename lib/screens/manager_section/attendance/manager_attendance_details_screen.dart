@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../api/employee_data_api.dart';
 import '../../../const/const_data.dart';
 import '../../../controllers/localization_controller.dart';
 import '../../../models/attendance_info.dart';
@@ -11,8 +10,6 @@ import '../../../widgets/widgets.dart';
 
 class ManagerAttendanceDetailsScreen extends StatelessWidget {
   static const String route_name = "manager_attendance_details_screen";
-
-  final EmployeeDataAPI _employeeDataAPI = EmployeeDataAPI();
 
   @override
   Widget build(BuildContext context) {
@@ -132,30 +129,6 @@ class ManagerAttendanceDetailsScreen extends StatelessWidget {
                       SizedBox(height: _size.height(36)),
                     ],
                   ),
-                ),
-                SizedBox(height: _size.height(20)),
-                FutureBuilder(
-                  future: _employeeDataAPI
-                      .fetchDayEvents(attendance.startDate)
-                      .catchError(
-                    (error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(error.toString()),
-                        ),
-                      );
-                    },
-                  ),
-                  builder: (ctx, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return PreLoader();
-                    } else {
-                      return AllEventsColumn(
-                        snapshot.data
-                            as List<Map<String, Map<String, dynamic>?>>,
-                      );
-                    }
-                  },
                 ),
               ],
             ),

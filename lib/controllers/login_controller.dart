@@ -300,8 +300,6 @@ class LoginController extends GetxController {
       else {
         //extracting the server response
         var resData = json.decode(res.body);
-
-        print(resData);
         //throwing the error
         throw resData["message"] ?? resData["verfication_code"][0];
       }

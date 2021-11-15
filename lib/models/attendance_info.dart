@@ -25,7 +25,7 @@ class AttendanceInfo {
     this._startDate =
         DateTime.tryParse(jsonData["clock_in_time"] ?? "") ?? DateTime.now();
     this._endDate = DateTime.tryParse(jsonData["clock_out_time"] ?? "");
-    this._date = DateTime.tryParse(jsonData["date"]) ?? this.startDate;
+    this._date = DateTime.tryParse(jsonData["date"] ?? "") ?? this.startDate;
     this._delay = int.parse(jsonData["delay"].toString());
     switch (jsonData["type"]) {
       case "attend":

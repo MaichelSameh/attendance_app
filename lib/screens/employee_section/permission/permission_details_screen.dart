@@ -252,7 +252,6 @@ class _PermissionDetailsScreenState extends State<PermissionDetailsScreen> {
                       RequestNewPermissionScreen.route_name,
                       arguments: permission,
                     ) as PermissionInfo;
-                    print(temp);
                     permission = temp;
                     setState(() {});
                   },

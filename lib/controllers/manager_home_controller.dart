@@ -140,15 +140,18 @@ class ManagerHomeController extends GetxController {
         //extracting the response data
         Map<String, dynamic> resData = json.decode(attendanceResponse.body);
         //getting the attended employee number
-        this._absentEmployee = resData["data"]["count_absent"];
-        //getting the attended employee number
         this._attendedEmployee = resData["data"]["count_attend"];
-        //getting the attended employee number
-        this._inVacationEmployee = resData["data"]["count_vacation"];
         //getting the delayed employees number
         this._delayedEmployee = resData["data"]["count_delay"];
         //getting the department employees count
         this._employeesCount = resData["data"]["all_employees"];
+        //getting the vacationed employee number
+        this._inVacationEmployee = resData["data"]["count_vacation"];
+        //getting the absent employee number
+        this._absentEmployee = this._employeesCount -
+            (this._attendedEmployee +
+                this._attendedEmployee +
+                this._inVacationEmployee);
         update();
       }
       //in this case case our token session is expired so we will just flush it
